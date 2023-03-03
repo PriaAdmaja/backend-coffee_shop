@@ -7,4 +7,4 @@ const db = new Pool ({
     password: "123456"
 })
 
-module.export = db;
+module.exports = db;
