@@ -2,7 +2,8 @@ const productsModel = require('../models/products.model')
 
 const getProduct = async (req, res) => {
     try {
-        const result = await productsModel.getProduct()
+        const { query } = req
+        const result = await productsModel.getProduct(query)
         res.status(200).json({
             data: result.rows,
             msg: "Get products data"
@@ -16,7 +17,7 @@ const getProduct = async (req, res) => {
 
 const addProduct = async (req, res) => {
     try {
-        const { body } = req;
+        const { body } = req
         const result = await productsModel.addProduct(body)
         res.status(201).json({
             data: result.rows,
