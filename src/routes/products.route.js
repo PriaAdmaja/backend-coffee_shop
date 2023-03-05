@@ -5,6 +5,7 @@ const productsController = require('../controllers/products.controller')
 
 
 productsRoute.get('/products', productsController.getProduct)
+productsRoute.get('/products', productsController.findProduct)
 productsRoute.post('/products', productsController.addProduct)
 productsRoute.put('/products', productsController.editProduct)
 productsRoute.delete('/products', productsController.deleteProduct)
