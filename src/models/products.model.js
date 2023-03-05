@@ -30,7 +30,7 @@ const getProduct = (data) => {
         }
 
         let sqlFinal
-       
+
         if (data.limit === undefined) {
             sqlFinal = `${sql} ${orderValue}`
         } else {
@@ -43,8 +43,7 @@ const getProduct = (data) => {
                 return;
             }
             resolve(result)
-        }
-        )
+        })
     })
 }
 
