@@ -9,43 +9,43 @@ const getProduct = (data) => {
                     pc.category 
                     from products p join product_category pc on p.category_id = pc.id order by`;
 
-        let orderValue = ''
+        let orderValue = '';
         switch (data.sortBy) {
             case "nameDesc":
-                orderValue = `product_name desc`
+                orderValue = `product_name desc`;
                 break;
             case "cheapest":
-                orderValue = `price asc`
+                orderValue = `price asc`;
                 break;
             case "priciest":
-                orderValue = `price desc`
+                orderValue = `price desc`;
                 break;
             case "idAsc":
-                orderValue = `p.id asc`
+                orderValue = `p.id asc`;
                 break;
             case "idDesc":
-                orderValue = `p.id dasc`
+                orderValue = `p.id dasc`;
                 break;
-            default: orderValue = "p.product_name asc"
+            default: orderValue = "p.product_name asc";
         }
 
-        let sqlFinal
+        let sqlFinal;
 
         if (data.limit === undefined) {
-            sqlFinal = `${sql} ${orderValue}`
+            sqlFinal = `${sql} ${orderValue}`;
         } else {
-            sqlFinal = `${sql} ${orderValue} limit ${data.limit}`
+            sqlFinal = `${sql} ${orderValue} limit ${data.limit}`;
         }
 
         db.query(sqlFinal, (err, result) => {
             if (err) {
-                reject(err)
+                reject(err);
                 return;
             }
-            resolve(result)
-        })
-    })
-}
+            resolve(result);
+        });
+    });
+};
 
 const findProduct = (data) => {
     return new Promise((resolve, reject) => {
@@ -55,21 +55,21 @@ const findProduct = (data) => {
         p.price, 
         pc.category 
         from products p join product_category pc on p.category_id = pc.id 
-        where lower(${data.tableName}) like lower('%${data.word}%')`
+        where lower(${data.tableName}) like lower('%${data.word}%')`;
 
         db.query(sql, (err, result) => {
             if (err) {
-                return reject(err)
+                return reject(err);
             }
-            resolve(result)
-        })
-    })
-}
+            resolve(result);
+        });
+    });
+};
 
 const addProduct = (data) => {
     return new Promise((resolve, reject) => {
-        const sql = "INSERT INTO products (product_name, price, description, category_id) values ($1, $2, $3, $4) RETURNING *"
-        const values = [data.productName, data.price, data.description, data.categoryId]
+        const sql = "INSERT INTO products (product_name, price, description, category_id) values ($1, $2, $3, $4) RETURNING *";
+        const values = [data.productName, data.price, data.description, data.categoryId];
         db.query(sql, values, (err, result) => {
             if (err) {
                 return reject(err);
@@ -79,7 +79,7 @@ const addProduct = (data) => {
         }
         );
     });
-}
+};
 
 const editProduct = (data) => {
     return new Promise((resolve, reject) => {
@@ -88,31 +88,31 @@ const editProduct = (data) => {
         price=$2, 
         description=$3, 
         category_id=$4 
-        where id=$5 RETURNING *`
-        const values = [data.productName, data.price, data.description, data.categoryId, data.id]
+        where id=$5 RETURNING *`;
+        const values = [data.productName, data.price, data.description, data.categoryId, data.id];
         db.query(sql, values, (err, result) => {
             if (err) {
-                return reject(err)
+                return reject(err);
             }
-            resolve(result)
-        })
-    })
-}
+            resolve(result);
+        });
+    });
+};
 
 const deleteProduct = (data) => {
     return new Promise((resolve, reject) => {
-        const sql = `delete from products where id=$1`
-        const values = [data.id]
+        const sql = `delete from products where id=$1`;
+        const values = [data.id];
         db.query(sql, values, (err, result) => {
             if (err) {
-                reject(err)
+                reject(err);
                 return;
             }
             resolve(result);
         }
-        )
-    })
-}
+        );
+    });
+};
 
 module.exports = {
     getProduct,
@@ -120,5 +120,4 @@ module.exports = {
     editProduct,
     deleteProduct,
     findProduct
-
-}
+};

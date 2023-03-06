@@ -1,8 +1,8 @@
-const { Router } = require('express')
-const welcomeRoute = Router()
+const { Router } = require('express');
+const welcomeRoute = Router();
 
-const welcomeController = require('../controllers/welcome.controller')
+const welcomeController = require('../controllers/welcome.controller');
 
-welcomeRoute.get('/', welcomeController)
+welcomeRoute.get('/', welcomeController);
 
-module.exports = welcomeRoute
+module.exports = welcomeRoute;

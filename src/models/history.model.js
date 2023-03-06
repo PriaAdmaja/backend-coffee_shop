@@ -1,53 +1,53 @@
-const db = require('../configs/db')
+const db = require('../configs/db');
 
 const getHistory = (params, query) => {
     return new Promise((resolve, reject) => {
-        let sql = `select * from history where user_id=$1 ` 
-        const values = [params.userId]
+        let sql = `select * from history where user_id=$1 ` ;
+        const values = [params.userId];
         if(query.limit !== undefined) {
-            sql += `limit ${query.limit}`
+            sql += `limit ${query.limit}`;
         }
         db.query(sql, values, (err, result) => {
             if (err) {
-                reject(err)
+                reject(err);
                 return;
             }
-            resolve(result)
-        })
-    })
-}
+            resolve(result);
+        });
+    });
+};
 
 const getAllHistory = (params, query) => {
     return new Promise((resolve, reject) => {
-        let sql = `select * from history ` 
-        const values = [params.userId]
+        let sql = `select * from history `;
+        const values = [params.userId];
         if(query.limit !== undefined) {
-            sql += `limit ${query.limit}`
+            sql += `limit ${query.limit}`;
         }
         db.query(sql, values, (err, result) => {
             if (err) {
-                reject(err)
+                reject(err);
                 return;
             }
-            resolve(result)
-        })
-    })
-}
+            resolve(result);
+        });
+    });
+};
 
 const addHistory = (data) => {
     return new Promise((resolve, reject) => {
         const sql = `insert into history (user_id, product_id, size, delivery_method, total, set_time, created_at) 
-                    values ($1, $2, $3, $4, $5, $6, now()) returning *`
-        const values = [data.userId, data.productId, data.size, data.deliveryMethod, data.total, data.setTime]
+                    values ($1, $2, $3, $4, $5, $6, now()) returning *`;
+        const values = [data.userId, data.productId, data.size, data.deliveryMethod, data.total, data.setTime];
         db.query(sql, values, (err, result) => {
             if (err) {
-                reject(err)
+                reject(err);
                 return;
             }
-            resolve(result)
-        })
-    })
-}
+            resolve(result);
+        });
+    });
+};
 
 const editHistory = (data) => {
     return new Promise((resolve, reject) => {
@@ -58,31 +58,31 @@ const editHistory = (data) => {
         delivery_method=$4,
         total=$5,
         set_time=$6  
-        where id=$7 RETURNING *`
-        const values = [data.userId, data.productId, data.size, data.deliveryMethod, data.total, data.setTime, data.id]
+        where id=$7 RETURNING *`;
+        const values = [data.userId, data.productId, data.size, data.deliveryMethod, data.total, data.setTime, data.id];
         db.query(sql, values, (err, result) => {
             if (err) {
-                return reject(err)
+                return reject(err);
             }
-            resolve(result)
-        })
-    })
-}
+            resolve(result);
+        });
+    });
+};
 
 const deleteHistory = (data) => {
     return new Promise((resolve, reject) => {
-        const sql = `delete from history where id=$1`
-        const values = [data.id]
+        const sql = `delete from history where id=$1`;
+        const values = [data.id];
         db.query(sql, values, (err, result) => {
             if (err) {
-                reject(err)
+                reject(err);
                 return;
             }
             resolve(result);
         }
-        )
-    })
-}
+        );
+    });
+};
 
 module.exports = {
     getHistory,
@@ -90,4 +90,4 @@ module.exports = {
     editHistory,
     deleteHistory,
     getAllHistory
-}
+};
