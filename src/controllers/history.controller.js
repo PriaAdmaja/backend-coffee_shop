@@ -24,7 +24,7 @@ const getHistory = async (req, res) => {
 const getAllHistory = async (req, res) => {
     try {
         const { query } = req;
-        const result = await historyModel.getHistory(query);
+        const result = await historyModel.getAllHistory(query);
         res.status(200).json({
             data: result.rows,
             msg: "Get history data"

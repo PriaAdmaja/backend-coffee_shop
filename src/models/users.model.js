@@ -1,18 +1,18 @@
 const db = require('../configs/db');
 
-const getUsers = (data) => {
+const getUsers = (query) => {
     return new Promise((resolve, reject) => {
         let sql = `select * from users order by `;
         let orderValue = `id asc `;
-        if (data.sortBy === 'idDesc') {
+        if (query.sortBy === 'idDesc') {
             orderValue = `id desc `;
         }
+
+        sql+=orderValue
         
-        if(data.limit === undefined) {
-            sql += orderValue;
-        } else {
-            sql = sql + orderValue + `limit ${data.limit}`;
-        }
+        if(query.limit !== undefined) {
+            sql += `limit ${query.limit}`;
+        } 
         
         db.query(sql, (err, result) => {
                 if (err) {
@@ -25,10 +25,10 @@ const getUsers = (data) => {
     });
 };
 
-const findUsers = (data) => {
+const findUsers = (params) => {
     return new Promise((resolve, reject) => {
         const sql = `select * from users where id=$1`;
-        const values = [data.id];
+        const values = [params.id];
         db.query(sql, values, (err, result) => {
                 if (err) {
                     reject(err);

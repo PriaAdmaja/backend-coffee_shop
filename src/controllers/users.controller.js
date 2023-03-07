@@ -1,20 +1,41 @@
 const usersModel = require('../models/users.model');
 
-const getUsers = (req, res) => {
-    const { query } = req;
-    usersModel
-        .getUsers(query)
-        .then((result) => {
+const getUsers = async(req, res) => {
+    // const { query } = req;
+    // usersModel
+    //     .getUsers(query)
+    //     .then((result) => {
+    //         res.status(200).json({
+    //             data: result.rows,
+    //         });
+    //     }).catch((err) => {
+    //         console.log(err);
+    //         res.status(500).json({
+    //             msg: "Internal Server Error",
+    //         });
+    //     });
+    try {
+        const { query } = req;
+        const result = await usersModel.getUsers(query);
+        if (result.rows.length === 0) {
+            res.status(404).json({
+                data: result.rows,
+                msg: "Data not found"
+            });
+        } else {
             res.status(200).json({
                 data: result.rows,
+                msg: "Get users data"
             });
-        }).catch((err) => {
-            console.log(err);
-            res.status(500).json({
-                msg: "Internal Server Error",
-            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: 'Internal server error'
         });
+    }
 };
+
 
 const findUsers = async (req, res) => {
     try {

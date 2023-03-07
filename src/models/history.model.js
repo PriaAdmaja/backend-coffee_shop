@@ -17,14 +17,13 @@ const getHistory = (params, query) => {
     });
 };
 
-const getAllHistory = (params, query) => {
+const getAllHistory = ( query) => {
     return new Promise((resolve, reject) => {
         let sql = `select * from history `;
-        const values = [params.userId];
         if(query.limit !== undefined) {
             sql += `limit ${query.limit}`;
         }
-        db.query(sql, values, (err, result) => {
+        db.query(sql, (err, result) => {
             if (err) {
                 reject(err);
                 return;

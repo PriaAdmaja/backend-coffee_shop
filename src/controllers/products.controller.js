@@ -15,29 +15,6 @@ const getProduct = async (req, res) => {
     }
 };
 
-const findProduct = async (req, res) => {
-    try {
-        const { query } = req;
-        const result = await productsModel.findProduct(query);
-        if (result.rows.length === 0) {
-            res.status(404).json({
-                data: result.rows,
-                msg: "Data not found"
-            });
-        } else {
-            res.status(200).json({
-                data: result.rows,
-                msg: "Get products data"
-            });
-        }
-           
-    } catch (err) {
-        res.status(500).json({
-            msg: "Internal server error"
-        });
-    }
-};
-
 const addProduct = async (req, res) => {
     try {
         const { body } = req;
@@ -91,5 +68,4 @@ module.exports = {
     getProduct,
     editProduct,
     deleteProduct,
-    findProduct
 };

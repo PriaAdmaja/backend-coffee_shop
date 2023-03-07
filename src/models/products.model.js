@@ -2,64 +2,47 @@ const db = require('../configs/db');
 
 const getProduct = (data) => {
     return new Promise((resolve, reject) => {
-        const sql = `select p.id, 
+        let sql = `select p.id, 
                     p.product_name, 
                     p.description, 
                     p.price, 
                     pc.category 
-                    from products p join product_category pc on p.category_id = pc.id order by`;
+                    from products p join product_category pc on p.category_id = pc.id `;
 
-        let orderValue = '';
+        if (data.category !== undefined) {
+            sql += `where lower(category) like lower('%${data.category}%') `;
+        }
+        if (data.name !== undefined) {
+            sql += `where lower(product_name) like lower('%${data.name}%') `;
+        }
+
         switch (data.sortBy) {
             case "nameDesc":
-                orderValue = `product_name desc`;
+                sql += `order by product_name desc `;
                 break;
             case "cheapest":
-                orderValue = `price asc`;
+                sql += `order by price asc `;
                 break;
             case "priciest":
-                orderValue = `price desc`;
+                sql += `order by price desc `;
                 break;
             case "idAsc":
-                orderValue = `p.id asc`;
+                sql += `order by p.id asc `;
                 break;
             case "idDesc":
-                orderValue = `p.id dasc`;
+                sql += `order by p.id dasc `;
                 break;
-            default: orderValue = "p.product_name asc";
+            default: sql += `order by p.product_name asc `;
         }
 
-        let sqlFinal;
-
-        if (data.limit === undefined) {
-            sqlFinal = `${sql} ${orderValue}`;
-        } else {
-            sqlFinal = `${sql} ${orderValue} limit ${data.limit}`;
+        if (data.limit !== undefined) {
+            sql += `limit ${data.limit}`;
         }
-
-        db.query(sqlFinal, (err, result) => {
-            if (err) {
-                reject(err);
-                return;
-            }
-            resolve(result);
-        });
-    });
-};
-
-const findProduct = (data) => {
-    return new Promise((resolve, reject) => {
-        const sql = `select p.id, 
-        p.product_name, 
-        p.description, 
-        p.price, 
-        pc.category 
-        from products p join product_category pc on p.category_id = pc.id 
-        where lower(${data.tableName}) like lower('%${data.word}%')`;
 
         db.query(sql, (err, result) => {
             if (err) {
-                return reject(err);
+                reject(err);
+                return;
             }
             resolve(result);
         });
@@ -119,5 +102,4 @@ module.exports = {
     addProduct,
     editProduct,
     deleteProduct,
-    findProduct
 };
