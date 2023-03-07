@@ -1,19 +1,6 @@
 const usersModel = require('../models/users.model');
 
 const getUsers = async(req, res) => {
-    // const { query } = req;
-    // usersModel
-    //     .getUsers(query)
-    //     .then((result) => {
-    //         res.status(200).json({
-    //             data: result.rows,
-    //         });
-    //     }).catch((err) => {
-    //         console.log(err);
-    //         res.status(500).json({
-    //             msg: "Internal Server Error",
-    //         });
-    //     });
     try {
         const { query } = req;
         const result = await usersModel.getUsers(query);
