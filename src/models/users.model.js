@@ -8,7 +8,7 @@ const getUsers = (query) => {
             orderValue = `id desc `;
         }
 
-        sql+=orderValue
+        sql+=orderValue;
         
         if(query.limit !== undefined) {
             sql += `limit ${query.limit}`;
