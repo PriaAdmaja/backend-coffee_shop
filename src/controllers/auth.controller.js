@@ -44,6 +44,18 @@ const login = async (req, res) => {
 
 }
 
+const privateAccess = (req, res) => {
+    const {id, created_at} = req.authInfo;
+    res.status(200).json({
+        payload: {
+            id,
+            created_at
+        },
+        msg: "OK"
+    })
+}
+
 module.exports = {
-    login
+    login,
+    privateAccess
 }

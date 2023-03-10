@@ -9,6 +9,7 @@ app.use(express.json());
 const morgan = require("morgan");
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms"));
 
+
 const masterRouter = require('./src/routes/index');
 app.use(masterRouter);
 
