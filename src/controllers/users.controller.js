@@ -1,4 +1,5 @@
 const usersModel = require('../models/users.model');
+const bcrypt = require('bcrypt')
 
 const getUsers = async(req, res) => {
     try {
@@ -49,8 +50,9 @@ const findUsers = async (req, res) => {
 
 const createUsers = async (req, res) => {
     try {
-        const { body } = req;
-        const result = await usersModel.createUsers(body);
+        const { email, password, phoneNumber } = req.body;
+        const encryptedPassword = await bcrypt.hash(password, 10)
+        const result = await usersModel.createUsers(email, encryptedPassword, phoneNumber);
         res.status(201).json({
             data: result.rows,
             msg: "Success create new account"
