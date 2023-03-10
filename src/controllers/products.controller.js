@@ -15,6 +15,21 @@ const getProduct = async (req, res) => {
     }
 };
 
+const getSingleProduct = async (req, res) => {
+    try {
+        const { params } = req;
+        const result = await productsModel.getSingleProduct(params);
+        res.status(200).json({
+            data: result.rows,
+            msg: "Get products data"
+        });
+    } catch (err) {
+        res.status(500).json({
+            msg: "Internal server error"
+        });
+    }
+};
+
 const addProduct = async (req, res) => {
     try {
         const { body } = req;
@@ -49,8 +64,9 @@ const editProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try {
-        const { body } = req;
-        const result = await productsModel.deleteProduct(body);
+        const { params } = req;
+        const result = await productsModel.getSingleProduct(params)
+        await productsModel.deleteProduct(params);
         res.status(201).json({
             data: result.rows,
             msg: "Product deleted"
@@ -68,4 +84,5 @@ module.exports = {
     getProduct,
     editProduct,
     deleteProduct,
+    getSingleProduct
 };

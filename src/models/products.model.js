@@ -3,22 +3,22 @@ const db = require('../configs/db');
 const getProduct = (data) => {
     return new Promise((resolve, reject) => {
         let sql = `select p.id, 
-                    p.product_name, 
+                    p.name, 
                     p.description, 
                     p.price, 
-                    pc.category 
-                    from products p join product_category pc on p.category_id = pc.id `;
+                    c.category 
+                    from products p join category c on p.category_id = c.id `;
 
         if (data.category !== undefined) {
             sql += `where lower(category) like lower('%${data.category}%') `;
         }
         if (data.name !== undefined) {
-            sql += `where lower(product_name) like lower('%${data.name}%') `;
+            sql += `where lower(name) like lower('%${data.name}%') `;
         }
 
         switch (data.sortBy) {
             case "nameDesc":
-                sql += `order by product_name desc `;
+                sql += `order by name desc `;
                 break;
             case "cheapest":
                 sql += `order by price asc `;
@@ -30,9 +30,9 @@ const getProduct = (data) => {
                 sql += `order by p.id asc `;
                 break;
             case "idDesc":
-                sql += `order by p.id dasc `;
+                sql += `order by p.id desc `;
                 break;
-            default: sql += `order by p.product_name asc `;
+            default: sql += `order by p.name asc `;
         }
 
         if (data.limit !== undefined) {
@@ -49,9 +49,24 @@ const getProduct = (data) => {
     });
 };
 
+const getSingleProduct = (params) => {
+    return new Promise((resolve, reject) => {
+        const sql = `select p.name, p.description, p.price, c.category 
+        from products p join category c on p.category_id = c.id where p.id=$1`;
+        db.query(sql, [params.id], (err, result) => {
+            if (err) {
+                return reject(err);
+
+            }
+            resolve(result);
+        }
+        );
+    });
+};
+
 const addProduct = (data) => {
     return new Promise((resolve, reject) => {
-        const sql = "INSERT INTO products (product_name, price, description, category_id) values ($1, $2, $3, $4) RETURNING *";
+        const sql = "INSERT INTO products (name, price, description, category_id) values ($1, $2, $3, $4) RETURNING *";
         const values = [data.productName, data.price, data.description, data.categoryId];
         db.query(sql, values, (err, result) => {
             if (err) {
@@ -66,13 +81,23 @@ const addProduct = (data) => {
 
 const editProduct = (data) => {
     return new Promise((resolve, reject) => {
-        const sql = `update products set 
-        product_name=$1, 
-        price=$2, 
-        description=$3, 
-        category_id=$4 
-        where id=$5 RETURNING *`;
-        const values = [data.productName, data.price, data.description, data.categoryId, data.id];
+        const dataAvail = []
+        if(data.productName != null) {
+            dataAvail.push('name=')
+        }
+        if(data.price != null) {
+            dataAvail.push('price=')
+        }
+        if(data.description != null) {
+            dataAvail.push('description=')
+        }
+        if(data.categoryId != null) {
+            dataAvail.push('category_id=')
+        }
+        const dataQuery = dataAvail.map((data, i) => (`${data}$${i+1}`)).join(`, `)
+        const rawValues = [data.productName, data.price, data.description, data.categoryId, data.id];
+        const values = rawValues.filter(d => d);
+        let sql = `update products set ${dataQuery} where id=$${values.length} RETURNING *`;
         db.query(sql, values, (err, result) => {
             if (err) {
                 return reject(err);
@@ -82,11 +107,10 @@ const editProduct = (data) => {
     });
 };
 
-const deleteProduct = (data) => {
+const deleteProduct = (params) => {
     return new Promise((resolve, reject) => {
         const sql = `delete from products where id=$1`;
-        const values = [data.id];
-        db.query(sql, values, (err, result) => {
+        db.query(sql, [params.id], (err, result) => {
             if (err) {
                 reject(err);
                 return;
@@ -102,4 +126,5 @@ module.exports = {
     addProduct,
     editProduct,
     deleteProduct,
+    getSingleProduct
 };

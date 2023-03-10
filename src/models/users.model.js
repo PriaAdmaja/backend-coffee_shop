@@ -29,6 +29,7 @@ const findUsers = (params) => {
     return new Promise((resolve, reject) => {
         const sql = `select * from users where id=$1`;
         const values = [params.id];
+        console.log(params.id);
         db.query(sql, values, (err, result) => {
                 if (err) {
                     reject(err);
@@ -42,7 +43,7 @@ const findUsers = (params) => {
 
 const createUsers = (data) => {
     return new Promise((resolve, reject) => {
-        const sql = `INSERT INTO users ("email", "password", phone_number) values ($1, $2, $3) RETURNING *`;
+        const sql = `INSERT INTO users ("email", "password", phone_number, created_at) values ($1, $2, $3, now()) RETURNING *`;
         const values = [data.email, data.password, data.phoneNumber];
         db.query(sql, values, (err, result) => {
                 if (err) {
@@ -56,16 +57,32 @@ const createUsers = (data) => {
 
 const updateUsers = (data) => {
     return new Promise((resolve, reject) => {
-        const sql = `update users set display_name=$1, 
-                        first_name=$2, 
-                        last_name=$3, 
-                        birth_date=$4, 
-                        gender=$5, 
-                        address=$6 
-                        where id=$7 RETURNING *`;
-        const values = [data.displayName, data.firstName, data.lastName, data.birthDate, data.gender, data.address, data.id];
+        const dataAvail = []
+        if(data.displayName != null) {
+            dataAvail.push('display_name=')
+        }
+        if(data.firstName != null) {
+            dataAvail.push('first_name=')
+        }
+        if(data.lastName != null) {
+            dataAvail.push('last_name=')
+        }
+        if(data.birthDate != null) {
+            dataAvail.push('birth_date=')
+        }
+        if(data.gender != null) {
+            dataAvail.push('gender=')
+        }
+        if(data.address != null) {
+            dataAvail.push('address=')
+        }
+        const dataQuery = dataAvail.map((data, i) => (`${data}$${i+1}`)).join(`, `)
+        const rawValues = [data.displayName, data.firstName, data.lastName, data.birthDate, data.gender, data.address, data.id];
+        const values = rawValues.filter(d => d);
+        let sql = `update users set ${dataQuery}, updated_at=now() where id=$${values.length} RETURNING *`;
         db.query(sql, values, (err, result) => {
                 if (err) {
+                    console.log(err);
                     return reject(err);
                 }
                 resolve(result);
@@ -74,11 +91,10 @@ const updateUsers = (data) => {
     });
 };
 
-const deleteUsers = (data) => {
+const deleteUsers = (params) => {
     return new Promise((resolve, reject) => {
         const sql =`delete from users where id=$1`;
-        const values = [data.id];
-        db.query(sql, values, (err, result) => {
+        db.query(sql, [params.id], (err, result) => {
                 if (err) {
                     reject(err);
                     return;

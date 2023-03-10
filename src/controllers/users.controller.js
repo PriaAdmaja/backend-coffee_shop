@@ -79,8 +79,9 @@ const updateUsers = async (req, res) => {
 
 const deleteUsers = async (req, res) => {
     try {
-        const { body } = req;
-        const result = await usersModel.deleteUsers(body);
+        const { params } = req;
+        const result = await usersModel.findUsers(params)
+        await usersModel.deleteUsers(params);
         res.status(201).json({
             data: result.rows,
             msg: "Account deleted"

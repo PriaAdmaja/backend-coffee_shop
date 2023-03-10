@@ -35,8 +35,8 @@ const getAllHistory = ( query) => {
 
 const addHistory = (data) => {
     return new Promise((resolve, reject) => {
-        const sql = `insert into history (user_id, product_id, size, delivery_method, total, set_time, created_at) 
-                    values ($1, $2, $3, $4, $5, $6, now()) returning *`;
+        const sql = `insert into history (user_id, product_id, size, delivery_method, total, set_time) 
+                    values ($1, $2, $3, $4, $5, $6) returning *`;
         const values = [data.userId, data.productId, data.size, data.deliveryMethod, data.total, data.setTime];
         db.query(sql, values, (err, result) => {
             if (err) {

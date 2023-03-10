@@ -7,6 +7,6 @@ usersRoute.get('/', usersController.getUsers);
 usersRoute.get('/:id', usersController.findUsers);
 usersRoute.post('/', usersController.createUsers);
 usersRoute.patch('/', usersController.updateUsers);
-usersRoute.delete('/', usersController.deleteUsers);
+usersRoute.delete('/:id', usersController.deleteUsers);
 
 module.exports = usersRoute;

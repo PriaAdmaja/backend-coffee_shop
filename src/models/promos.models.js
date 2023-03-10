@@ -2,7 +2,7 @@ const db = require('../configs/db');
 
 const getPromos = (data) => {
     return new Promise((resolve, reject) => {
-        let sql = `select * from promo `;
+        let sql = `select * from promos`;
         if(data.limit !== undefined) {
             sql += `limit ${data.limit}`;
         }
@@ -16,10 +16,23 @@ const getPromos = (data) => {
     });
 };
 
+const getSinglePromo = (params) => {
+    return new Promise((resolve, reject) => {
+        const sql = `select * from promos where id=$1`;
+        db.query(sql, [params.id], (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(result);
+        }
+        );
+    });
+};
+
 const addPromos = (data) => {
     return new Promise((resolve, reject) => {
-        const sql = `insert into promo (coupon_code, discount, description) values ($1, $2, $3) returning *`;
-        const values = [data.couponCode, data.discount, data.description];
+        const sql = `INSERT INTO promos (coupon_code, discount, description, products_id) values ($1, $2, $3, $4) RETURNING *`;
+        const values = [data.couponCode, data.discount, data.description, data.productsId];
         db.query(sql, values, (err, result) => {
             if (err) {
                 reject(err);
@@ -32,12 +45,20 @@ const addPromos = (data) => {
 
 const editPromos = (data) => {
     return new Promise((resolve, reject) => {
-        const sql = `update promo set 
-        coupon_code=$1, 
-        discount=$2, 
-        description=$3  
-        where id=$4 RETURNING *`;
-        const values = [data.couponCode, data.discount, data.description, data.id];
+        const dataAvail = []
+        if(data.couponCode != null) {
+            dataAvail.push('coupon_code=')
+        }
+        if(data.discount != null) {
+            dataAvail.push('discount=')
+        }
+        if(data.description != null) {
+            dataAvail.push('description=')
+        }
+        const dataQuery = dataAvail.map((data, i) => (`${data}$${i+1}`)).join(`, `)
+        const rawValues = [data.couponCode, data.discount, data.description, data.id];
+        const values = rawValues.filter(d => d);
+        const sql = `update promos set ${dataQuery} where id=$${values.length} RETURNING *`;
         db.query(sql, values, (err, result) => {
             if (err) {
                 return reject(err);
@@ -47,10 +68,10 @@ const editPromos = (data) => {
     });
 };
 
-const deletePromos = (data) => {
+const deletePromos = (params) => {
     return new Promise((resolve, reject) => {
-        const sql = `delete from promo where id=$1`;
-        const values = [data.id];
+        const sql = `delete from promos where id=$1`;
+        const values = [params.id];
         db.query(sql, values, (err, result) => {
             if (err) {
                 reject(err);
@@ -66,5 +87,6 @@ module.exports = {
     getPromos,
     addPromos,
     editPromos,
-    deletePromos
+    deletePromos,
+    getSinglePromo
 };
