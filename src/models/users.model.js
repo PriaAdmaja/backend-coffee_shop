@@ -44,16 +44,14 @@ const findUsers = (params) => {
 
 const createUsers = (email, password, phoneNumber) => {
     return new Promise((resolve, reject) => {
-        const sql = `INSERT INTO users ("email", "password", phone_number, created_at) values ($1, $2, $3, now()) RETURNING *`;
-        // const sql = `with first_insert as (
-        //     insert into users (email, "password", phone_number, created_at) 
-        //     values ($1, $2, $3, now())
-        //     returning id
-        //   )
-        //   insert into biodata (users_id)
-        //   values ((select id from first_insert)
-        //   ) returning *;`
-        const values = [email, password, phoneNumber];
+        const char = `qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM0987654321`
+        let otp = ``
+        for(let i = 0; i < 10; i++ ) {
+            otp += char[Math.floor(Math.random() * char.length)]
+        }
+
+        const sql = `INSERT INTO users ("email", "password", phone_number, otp, created_at) values ($1, $2, $3, $4, now()) RETURNING *`;
+        const values = [email, password, phoneNumber, otp];
         db.query(sql, values, (err, result) => {
             if (err) {
                 return reject(err);

@@ -58,6 +58,7 @@ const createUsers = async (req, res) => {
             msg: "Success create new account"
         });
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             msg: "Internal server error"
         });
@@ -73,6 +74,7 @@ const updateUsers = async (req, res) => {
             msg: "Account updated"
         });
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             msg: "Internal server error"
         });
@@ -89,6 +91,7 @@ const deleteUsers = async (req, res) => {
             msg: "Account deleted"
         });
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             msg: "Internal server error"
         });

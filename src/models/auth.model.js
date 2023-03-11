@@ -12,6 +12,33 @@ const userVerification = (data) => {
     })
 }
 
+const getPassword = (id) => {
+    return new Promise((resolve, reject) => {
+        const sql = `select password from users where id=$1`;
+        db.query(sql, [id], (err, result) => {
+            if(err) {
+                return reject(err);
+            };
+            resolve(result);
+        } );
+    });
+};
+
+const editPassword = (password, id) => {
+    return new Promise((resolve, reject) => {
+        const sql = `update users set password=$1 where id=$2`;
+        db.query(sql, [password, id], (err, result) => {
+            if(err) {
+                return reject(err);
+            };
+            resolve(result)
+        });
+    });
+};
+
 module.exports = {
-    userVerification
+    userVerification,
+    getPassword,
+    editPassword
+
 }
