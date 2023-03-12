@@ -36,6 +36,13 @@ const editPassword = (password, id) => {
     });
 };
 
+const forgotPassword = (email) => {
+    return new Promise((resolve, reject) => {
+        const sql = `select otp from users where email=$1`;
+        db.query(sql, [email], )
+    })
+}
+
 module.exports = {
     userVerification,
     getPassword,

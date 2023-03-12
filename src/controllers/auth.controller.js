@@ -82,6 +82,10 @@ const editPassword = async (req, res) => {
     }
 }
 
+const forgotPassword = () => {
+    
+}
+
 module.exports = {
     login,
     privateAccess,
