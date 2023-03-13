@@ -99,8 +99,8 @@ const getMetaProducts = (data) => {
 
 const addProduct = (data) => {
     return new Promise((resolve, reject) => {
-        const sql = "INSERT INTO products (name, price, description, category_id) values ($1, $2, $3, $4) RETURNING *";
-        const values = [data.productName, data.price, data.description, data.categoryId];
+        const sql = "INSERT INTO products (name, price, description, category_id, pict_url) values ($1, $2, $3, $4, $5) RETURNING *";
+        const values = [data.productName, data.price, data.description, data.categoryId, data.pictUrl];
         db.query(sql, values, (err, result) => {
             if (err) {
                 return reject(err);
@@ -112,7 +112,7 @@ const addProduct = (data) => {
     });
 };
 
-const editProduct = (data) => {
+const editProduct = (data, params) => {
     return new Promise((resolve, reject) => {
         const dataAvail = []
         if (data.productName != null) {
@@ -127,8 +127,11 @@ const editProduct = (data) => {
         if (data.categoryId != null) {
             dataAvail.push('category_id=')
         }
+        if (data.pictUrl != null) {
+            dataAvail.push('pict_url=')
+        }
         const dataQuery = dataAvail.map((data, i) => (`${data}$${i + 1}`)).join(`, `)
-        const rawValues = [data.productName, data.price, data.description, data.categoryId, data.id];
+        const rawValues = [data.productName, data.price, data.description, data.categoryId, data.pictUrl, params.id];
         const values = rawValues.filter(d => d);
         let sql = `update products set ${dataQuery} where id=$${values.length} RETURNING *`;
         db.query(sql, values, (err, result) => {

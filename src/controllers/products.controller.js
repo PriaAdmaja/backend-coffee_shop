@@ -55,8 +55,8 @@ const addProduct = async (req, res) => {
 
 const editProduct = async (req, res) => {
     try {
-        const { body } = req;
-        const result = await productsModel.editProduct(body);
+        const { body, params } = req;
+        const result = await productsModel.editProduct(body, params);
         res.status(201).json({
             data: result.rows,
             msg: "Success update product"
@@ -68,6 +68,10 @@ const editProduct = async (req, res) => {
         });
     }
 };
+
+// const addImage = async (req, res) => {
+
+// }
 
 const deleteProduct = async (req, res) => {
     try {
