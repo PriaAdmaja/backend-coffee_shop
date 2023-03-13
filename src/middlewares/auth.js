@@ -24,6 +24,36 @@ const checkToken = (req, res, next) => {
     });
 };
 
+const checkTokenAdmin = (req, res, next) => {
+    const bearerToken = req.header("Authorization")
+    if(!bearerToken) {
+        return res.status(401).json({
+            msg: "Please login with your account"
+        });
+    };
+    const token = bearerToken.split(" ")[1];
+    jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
+        if (err && err.name) {
+            return res.status(403).json({
+                msg: err.message
+            })
+        }
+        if (err) {
+            return res.status(500).json({
+                msg: "Internal server error"
+            })
+        }
+        if (payload.roles_id !== 2) {
+            return res.status(403).json({
+                msg: "Permission denied"
+            })
+        }
+        req.authInfo = payload;
+        next()
+    });
+}
+
 module.exports = {
-    checkToken
+    checkToken,
+    checkTokenAdmin
 }

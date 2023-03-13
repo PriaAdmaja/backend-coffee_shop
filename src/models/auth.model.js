@@ -2,7 +2,7 @@ const db = require('../configs/db')
 
 const userVerification = (data) => {
     return new Promise((resolve, reject) => {
-        const sql= `select id, created_at, password from users where email=$1`;
+        const sql= `select id, created_at, roles_id, password from users where email=$1`;
         db.query(sql, [data.email], (err, result) => {
             if(err) {
                 return reject(err)
@@ -36,16 +36,47 @@ const editPassword = (password, id) => {
     });
 };
 
-const forgotPassword = (email) => {
+const createOtp = (email, otp) => {
+    return new Promise((resolve, reject) => {
+        const sql = `update users set otp=$1 where email=$2 returning otp`;
+        db.query(sql, [otp, email], (err, result) => {
+            if(err) {
+                return reject(err)
+            }
+            resolve(result)
+        })
+    })
+}
+
+const checkOtp = (email) => {
     return new Promise((resolve, reject) => {
         const sql = `select otp from users where email=$1`;
-        db.query(sql, [email], )
+        db.query(sql, [email], (err, result) => {
+            if(err) {
+                return reject(err)
+            }
+            resolve(result)
+        })
+    })
+}
+
+const setNewPassword = (newPassword, email) => {
+    return new Promise((resolve, reject) => {
+        const sql = `update users set otp=$1, password=$2 where email=$3`;
+        db.query(sql, [null, newPassword, email], (err, result) => {
+            if(err) {
+                return reject(err)
+            }
+            resolve(result)
+        })
     })
 }
 
 module.exports = {
     userVerification,
     getPassword,
-    editPassword
-
+    editPassword,
+    createOtp,
+    checkOtp,
+    setNewPassword
 }

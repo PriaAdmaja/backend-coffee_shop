@@ -6,11 +6,11 @@ const createTransaction = async (req, res) => {
     const { authInfo, body} = req;
     const client = await db.connect()
     try {
-        (await client).query("BEGIN");
+        await client.query("BEGIN");
         const result = await transactionModel.createTransaction(client, body, authInfo.id);
         const transactionId = result.rows[0].id;
         await transactionModel.createCart(client, body, transactionId);
-        (await client).query("COMMIT");
+        await client.query("COMMIT");
         const transactionDetail = await transactionModel.getTransactionDetail(client, transactionId);
         res.status(200).json({
             data: transactionDetail.rows,
@@ -22,7 +22,7 @@ const createTransaction = async (req, res) => {
             msg: "Internal server error"
         });
     } finally {
-        (await client).release();
+        client.release();
     }
 };
 

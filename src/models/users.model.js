@@ -44,14 +44,9 @@ const findUsers = (params) => {
 
 const createUsers = (email, password, phoneNumber) => {
     return new Promise((resolve, reject) => {
-        const char = `qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM0987654321`
-        let otp = ``
-        for(let i = 0; i < 10; i++ ) {
-            otp += char[Math.floor(Math.random() * char.length)]
-        }
-
-        const sql = `INSERT INTO users ("email", "password", phone_number, otp, created_at) values ($1, $2, $3, $4, now()) RETURNING *`;
-        const values = [email, password, phoneNumber, otp];
+        
+        const sql = `INSERT INTO users ("email", "password", phone_number, created_at) values ($1, $2, $3, now()) RETURNING *`;
+        const values = [email, password, phoneNumber];
         db.query(sql, values, (err, result) => {
             if (err) {
                 return reject(err);

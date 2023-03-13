@@ -4,10 +4,17 @@ const getProduct = async (req, res) => {
     try {
         const { query } = req;
         const result = await productsModel.getProduct(query);
+        if(result.rows.length === 0) {
+            return res.status(404).json({
+                msg: "Product not found"
+            })
+        };
+        const meta = await productsModel.getMetaProducts(query);
         res.status(200).json({
             data: result.rows,
-            msg: "Get products data"
-        });
+            meta,
+            msg: "Get product data"
+        })
     } catch (err) {
         res.status(500).json({
             msg: "Internal server error"
@@ -84,5 +91,5 @@ module.exports = {
     getProduct,
     editProduct,
     deleteProduct,
-    getSingleProduct
+    getSingleProduct,
 };

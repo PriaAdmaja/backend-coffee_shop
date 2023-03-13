@@ -35,11 +35,13 @@ const getProduct = (data) => {
             default: sql += `order by p.name asc `;
         }
 
-        if (data.limit !== undefined) {
-            sql += `limit ${data.limit}`;
-        }
+        const limit = Number(data.limit || 10);
+        const page = Number(data.page || 1);
+        const offset = (page - 1) * limit
 
-        db.query(sql, (err, result) => {
+        sql += `limit $1 offset $2`
+
+        db.query(sql, [limit, offset], (err, result) => {
             if (err) {
                 reject(err);
                 return;
@@ -64,6 +66,37 @@ const getSingleProduct = (params) => {
     });
 };
 
+const getMetaProducts = (data) => {
+    return new Promise((resolve, reject) => {
+        const sql = `select count(*) as total_products from products p `;
+        db.query(sql, (err, result) => {
+            if (err) {
+                return reject(err)
+            }
+            console.log(result.rows[0].total_products);
+            const totalProduct = Number(result.rows[0].total_products);
+            const page = Number(data.page || 1);
+            const dataLimit = Number(data.limit || 10);
+            const totalPage = Math.ceil(totalProduct / dataLimit);
+            let prev = '';
+            let next = '';
+            if (page === 1) {
+                prev = null
+            };
+            if (page === totalPage) {
+                next = null
+            };
+            const meta = {
+                totalProduct,
+                totalPage,
+                prev,
+                next
+            }
+            resolve(meta)
+        })
+    })
+}
+
 const addProduct = (data) => {
     return new Promise((resolve, reject) => {
         const sql = "INSERT INTO products (name, price, description, category_id) values ($1, $2, $3, $4) RETURNING *";
@@ -82,19 +115,19 @@ const addProduct = (data) => {
 const editProduct = (data) => {
     return new Promise((resolve, reject) => {
         const dataAvail = []
-        if(data.productName != null) {
+        if (data.productName != null) {
             dataAvail.push('name=')
         }
-        if(data.price != null) {
+        if (data.price != null) {
             dataAvail.push('price=')
         }
-        if(data.description != null) {
+        if (data.description != null) {
             dataAvail.push('description=')
         }
-        if(data.categoryId != null) {
+        if (data.categoryId != null) {
             dataAvail.push('category_id=')
         }
-        const dataQuery = dataAvail.map((data, i) => (`${data}$${i+1}`)).join(`, `)
+        const dataQuery = dataAvail.map((data, i) => (`${data}$${i + 1}`)).join(`, `)
         const rawValues = [data.productName, data.price, data.description, data.categoryId, data.id];
         const values = rawValues.filter(d => d);
         let sql = `update products set ${dataQuery} where id=$${values.length} RETURNING *`;
@@ -126,5 +159,6 @@ module.exports = {
     addProduct,
     editProduct,
     deleteProduct,
-    getSingleProduct
+    getSingleProduct,
+    getMetaProducts
 };
