@@ -19,7 +19,13 @@ app.use(morgan(":method :url :status :res[content-length] - :response-time ms"))
 const masterRouter = require('./src/routes/index');
 app.use(masterRouter);
 
+const mongoose = require('mongoose'); 
+const mongoUrl = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}/?retryWrites=true&w=majority`;
+mongoose.connect(mongoUrl)
+.then(() => {
+    console.log("Mongo DB Connected");
+    app.listen(port, () => {
+        console.log(`Server running on port ${port}`);
+    });
+}).catch((err) => console.log(err))
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
