@@ -5,7 +5,8 @@ const getProduct = (data) => {
         let sql = `select p.id, 
                     p.name, 
                     p.description, 
-                    p.price, 
+                    p.price,
+                    p.pict_url, 
                     c.category 
                     from products p join category c on p.category_id = c.id `;
 
@@ -68,6 +69,7 @@ const getSingleProduct = (params) => {
 
 const getMetaProducts = (data) => {
     return new Promise((resolve, reject) => {
+    
         const sql = `select count(*) as total_products from products p `;
         db.query(sql, (err, result) => {
             if (err) {
@@ -78,8 +80,8 @@ const getMetaProducts = (data) => {
             const page = Number(data.page || 1);
             const dataLimit = Number(data.limit || 10);
             const totalPage = Math.ceil(totalProduct / dataLimit);
-            let prev = '';
-            let next = '';
+            let prev = `/products?limit=${data.limit}&page=${Number(data.page) - 1}`;
+            let next = `/products?limit=${data.limit}&page=${Number(data.page) + 1}`;
             if (page === 1) {
                 prev = null
             };

@@ -20,7 +20,7 @@ const masterRouter = require('./src/routes/index');
 app.use(masterRouter);
 
 const mongoose = require('mongoose'); 
-const mongoUrl = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}/?retryWrites=true&w=majority`;
+const mongoUrl = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}/${process.env.MONGO_DBNAME}?retryWrites=true&w=majority`;
 mongoose.connect(mongoUrl)
 .then(() => {
     console.log("Mongo DB Connected");

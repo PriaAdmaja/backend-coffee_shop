@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const db = require('../configs/db')
 
 const authModel = require('../models/auth.model');
+const usersModel = require('../models/users.model');
 
 const login = async (req, res) => {
     try {
@@ -46,6 +47,30 @@ const login = async (req, res) => {
 
 }
 
+const register = async (req, res) => {
+    const { body } = req;
+    try {
+        const result = await authModel.checkUsers(body);
+        if (result.rows[0]) {
+            return res.status(200).json({
+                msg: "Email already exist"
+            })
+        }
+        const encryptedPassword = await bcrypt.hash(body.password, 10)
+        const newUsers = await usersModel.createUsers(body.email, encryptedPassword, body.phoneNumber)
+        res.status(200).json({
+            data: newUsers.rows,
+            msg: "Success create new user"
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            msg: "Internal server error"
+        })
+
+    }
+}
+
 const privateAccess = (req, res) => {
     const { id, created_at, roles_id } = req.authInfo;
     res.status(200).json({
@@ -83,28 +108,28 @@ const editPassword = async (req, res) => {
     }
 }
 
-const forgotPassword = async(req, res) => {
+const forgotPassword = async (req, res) => {
     const { body } = req;
     const char = `qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM0987654321`
-        let otp = ``
-        for(let i = 0; i < 10; i++ ) {
-            otp += char[Math.floor(Math.random() * char.length)]
-        }
+    let otp = ``
+    for (let i = 0; i < 10; i++) {
+        otp += char[Math.floor(Math.random() * char.length)]
+    }
     try {
         const result = await authModel.createOtp(body.email, otp);
-        if(result.rows.length === 0) {
+        if (result.rows.length === 0) {
             return res.status(404).json({
                 msg: "Email not found"
             })
         }
         res.status(200).json({
-            data : {
+            data: {
                 email: body.email,
                 otp: result.rows[0].otp
             },
             msg: "Get otp code"
         })
-        
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -113,13 +138,13 @@ const forgotPassword = async(req, res) => {
     }
 }
 
-const verifyOtp = async(req, res) => {
+const verifyOtp = async (req, res) => {
     const { body } = req;
     const client = await db.connect()
     try {
         await client.query("BEGIN");
         const result = await authModel.checkOtp(body.email);
-        if(body.otp !== result.rows[0].otp) {
+        if (body.otp !== result.rows[0].otp) {
             return res.status(404).json({
                 msg: "Invalid code"
             })
@@ -145,5 +170,6 @@ module.exports = {
     privateAccess,
     editPassword,
     forgotPassword,
-    verifyOtp
+    verifyOtp,
+    register
 }

@@ -61,19 +61,18 @@ const checkTokenAdmin = (req, res, next) => {
     });
 }
 
-const checkAdmin = (req, res, next) => {
-    const { roles_id} = req.authInfo
-    if (roles_id !== 2) {
-        return error(res, {
-            status: 403,
-            message: 'Permission denied'
-        })
-    }
-    next()
-}
+// const checkAdmin = (req, res, next) => {
+//     const { roles_id} = req.authInfo
+//     if (roles_id !== 2) {
+//         return error(res, {
+//             status: 403,
+//             message: 'Permission denied'
+//         })
+//     }
+//     next()
+// }
 
 module.exports = {
     checkToken,
     checkTokenAdmin,
-    checkAdmin
 }

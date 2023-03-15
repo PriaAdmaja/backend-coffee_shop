@@ -72,11 +72,26 @@ const setNewPassword = (newPassword, email) => {
     })
 }
 
+const checkUsers = (body) => {
+    return new Promise((resolve, reject) => {
+        const sql = `select email from users where email=$1`;
+        db.query(sql, [body.email], (err, result) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(result);
+        }
+        );
+    });
+};
+
 module.exports = {
     userVerification,
     getPassword,
     editPassword,
     createOtp,
     checkOtp,
-    setNewPassword
+    setNewPassword,
+    checkUsers
 }
