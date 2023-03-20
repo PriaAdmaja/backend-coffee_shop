@@ -16,6 +16,7 @@ const getProduct = async (req, res) => {
             msg: "Get product data"
         })
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             msg: "Internal server error"
         });
@@ -31,6 +32,7 @@ const getSingleProduct = async (req, res) => {
             msg: "Get products data"
         });
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             msg: "Internal server error"
         });
