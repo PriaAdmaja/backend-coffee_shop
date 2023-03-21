@@ -54,7 +54,7 @@ const getProduct = (data) => {
 
 const getSingleProduct = (params) => {
     return new Promise((resolve, reject) => {
-        const sql = `select p.name, p.description, p.price, c.category 
+        const sql = `select p.name, p.description, p.price, p.pict_url, c.category 
         from products p join category c on p.category_id = c.id where p.id=$1`;
         db.query(sql, [params.id], (err, result) => {
             if (err) {
