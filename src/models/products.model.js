@@ -80,8 +80,34 @@ const getMetaProducts = (data) => {
             const page = Number(data.page || 1);
             const dataLimit = Number(data.limit || 10);
             const totalPage = Math.ceil(totalProduct / dataLimit);
-            let prev = `/products?limit=${data.limit}&page=${Number(data.page) - 1}`;
-            let next = `/products?limit=${data.limit}&page=${Number(data.page) + 1}`;
+
+            let endpoint = `/products?`;
+            if (data.category !== undefined) {
+                endpoint += `category=${data.category}&`;
+            }
+            if (data.name !== undefined) {
+                endpoint += `name=${data.name}&`;
+            }
+
+            switch (data.sortBy) {
+                case "nameDesc":
+                    endpoint += `sortBy=nameDesc&`;
+                    break;
+                case "cheapest":
+                    endpoint += `sortBy=cheapest&`;
+                    break;
+                case "priciest":
+                    endpoint += `sortBy=priciest&`;
+                    break;
+                case "idAsc":
+                    endpoint += `sortBy=idAsc&`;
+                    break;
+                case "idDesc":
+                    endpoint += `sortBy=idDesc&`;
+                    break;
+            }
+            let prev = `${endpoint}limit=${dataLimit}&page=${page - 1}`;
+            let next = `${endpoint}limit=${dataLimit}&page=${page + 1}`;
             if (page === 1) {
                 prev = null
             };
