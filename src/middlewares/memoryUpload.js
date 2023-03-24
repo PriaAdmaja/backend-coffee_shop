@@ -1,18 +1,15 @@
 const multer = require('multer');
 const path = require('path');
 
-const error = require('../utils/response')
-
 const storage = multer.memoryStorage()
 const limits = 2e6;
 
 const fileFilter = (req, file, cb) => {
-    const pattern = /jpg|png|webp/i;
+    const pattern = /jpg|png|webp|jpeg|gif/i;
     const ext = path.extname(file.originalname);
     if (!pattern.test(ext)) {
-        // error(ext, {status: 422, message: "Wrong file extension" });
-        cb(null, false)
-        return
+        req.fileValidationError = "Invalid file type";
+        return cb(null, false, req.fileValidationError)
     } 
     cb(null, true);
 }

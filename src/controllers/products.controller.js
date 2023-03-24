@@ -1,4 +1,6 @@
 const productsModel = require('../models/products.model');
+const multer = require('multer');
+const upload = require('../middlewares/memoryUpload')
 
 const getProduct = async (req, res) => {
     try {
@@ -70,10 +72,6 @@ const editProduct = async (req, res) => {
         });
     }
 };
-
-// const addImage = async (req, res) => {
-
-// }
 
 const deleteProduct = async (req, res) => {
     try {
