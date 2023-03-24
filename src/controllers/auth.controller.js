@@ -8,6 +8,11 @@ const usersModel = require('../models/users.model');
 const login = async (req, res) => {
     try {
         const { body } = req;
+        if(!body.email && !body.password) {
+            return res.status(401).json({
+                msg: "Input your email & password"
+            })
+        }
         const result = await authModel.userVerification(body);
         if (result.rows.length === 0) {
             return res.status(401).json({
@@ -50,6 +55,11 @@ const login = async (req, res) => {
 const register = async (req, res) => {
     const { body } = req;
     try {
+        if(!body.email || !body.password || !body.phoneNumber) {
+            return res.status(401).json({
+                msg: "Incomplete register form data"
+            })
+        }
         const result = await authModel.checkUsers(body);
         if (result.rows[0]) {
             return res.status(200).json({
