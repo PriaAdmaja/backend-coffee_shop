@@ -19,7 +19,7 @@ const login = async (req, res) => {
                 msg: "Try with another email/password"
             })
         }
-        const { id, created_at, roles_id, password } = result.rows[0];
+        const { id, created_at, roles_id, password, pict_url } = result.rows[0];
         const checkPassword = await bcrypt.compare(body.password, password)
         if (!checkPassword) {
             return res.status(401).json({
@@ -40,6 +40,7 @@ const login = async (req, res) => {
             if (err) throw err;
             res.status(200).json({
                 msg: "Welcome",
+                profilePict: pict_url,
                 token
             });
         });

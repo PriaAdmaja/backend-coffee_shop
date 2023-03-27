@@ -2,7 +2,7 @@ const db = require('../configs/db')
 
 const userVerification = (data) => {
     return new Promise((resolve, reject) => {
-        const sql= `select id, created_at, roles_id, password from users where email=$1`;
+        const sql= `select id, created_at, roles_id, password, pict_url from users where email=$1`;
         db.query(sql, [data.email], (err, result) => {
             if(err) {
                 return reject(err)
