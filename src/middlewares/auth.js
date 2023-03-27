@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
+const redisClient = require('redis').createClient();
 const { error } = require('../utils/response')
 
-const checkToken = (req, res, next) => {
+const checkToken = async(req, res, next) => {
     const bearerToken = req.header("Authorization")
     if(!bearerToken) {
         return error(res, {
@@ -9,7 +10,15 @@ const checkToken = (req, res, next) => {
             message: 'Please login with your account'
         })
     };
+
     const token = bearerToken.split(" ")[1];
+    const blTokenList = await redisClient.get(`bl_${token}`);
+    if(blTokenList) {
+        return res.status(401).json({
+            msg: "Invalid token"
+        })
+    }
+
     jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
         if (err && err.name) {
             return error(res, {
@@ -23,7 +32,9 @@ const checkToken = (req, res, next) => {
                 message: 'Internal server error'
             })
         }
+
         req.authInfo = payload;
+        req.token = token;
         next()
     });
 };

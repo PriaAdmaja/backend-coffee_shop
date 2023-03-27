@@ -8,7 +8,8 @@ authRouter.get("/private", authMiddleware.checkToken, authController.privateAcce
 authRouter.get("/forgotpassword", authController.forgotPassword);
 authRouter.post("/login", authController.login);
 authRouter.post("/register", authController.register);
-authRouter.patch("/verifyOtp", authController.verifyOtp)
+authRouter.post("/logout", authMiddleware.checkToken, authController.logout)
+authRouter.patch("/verifyOtp", authController.verifyOtp);
 authRouter.patch("/", authMiddleware.checkToken, authController.editPassword);
 
 module.exports = authRouter

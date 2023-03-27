@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const redisClient = require('redis').createClient();
 const db = require('../configs/db')
 
 const authModel = require('../models/auth.model');
@@ -80,6 +81,16 @@ const register = async (req, res) => {
         })
 
     }
+}
+
+const logout = async(req, res) => {
+    const { authInfo, token } = req;
+    const tokenKey = `bl_${token}`;
+    await redisClient.set(tokenKey, token);
+    redisClient.expireAt(tokenKey, authInfo.exp);
+    return res.status(200).json({
+        msg: 'Token invalidated'
+    })
 }
 
 const privateAccess = (req, res) => {
@@ -182,5 +193,6 @@ module.exports = {
     editPassword,
     forgotPassword,
     verifyOtp,
-    register
+    register,
+    logout
 }
