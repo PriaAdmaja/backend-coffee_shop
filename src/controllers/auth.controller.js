@@ -1,15 +1,16 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const redisClient = require('redis').createClient();
-const db = require('../configs/db')
+const redis = require('redis')
+const db = require('../configs/db');
 
 const authModel = require('../models/auth.model');
 const usersModel = require('../models/users.model');
 
+
 const login = async (req, res) => {
     try {
         const { body } = req;
-        if(!body.email && !body.password) {
+        if (!body.email && !body.password) {
             return res.status(401).json({
                 msg: "Input your email & password"
             })
@@ -57,7 +58,7 @@ const login = async (req, res) => {
 const register = async (req, res) => {
     const { body } = req;
     try {
-        if(!body.email || !body.password || !body.phoneNumber) {
+        if (!body.email || !body.password || !body.phoneNumber) {
             return res.status(401).json({
                 msg: "Incomplete register form data"
             })
@@ -83,14 +84,29 @@ const register = async (req, res) => {
     }
 }
 
-const logout = async(req, res) => {
-    const { authInfo, token } = req;
-    const tokenKey = `bl_${token}`;
-    await redisClient.set(tokenKey, token);
-    redisClient.expireAt(tokenKey, authInfo.exp);
-    return res.status(200).json({
-        msg: 'Token invalidated'
-    })
+const logout = async (req, res) => {
+    try {
+        const redisClient = redis.createClient({
+            url: `redis://${process.env.REDIS_USER}:${process.env.REDIS_PASSWORD}@redis-19327.c295.ap-southeast-1-1.ec2.cloud.redislabs.com:19327`
+        });
+        redisClient.on('error', err => console.log('Redis client error', err));
+        await redisClient.connect();
+        const { authInfo, token } = req;
+        const tokenKey = `bl_${token}`;
+        await redisClient.set(tokenKey, token);
+        await redisClient.expireAt(tokenKey, authInfo.exp);
+        await redisClient.disconnect();
+        return res.status(200).json({
+            msg: 'Token invalidated'
+        })
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: "Internal server error"
+        })
+    } 
+
 }
 
 const privateAccess = (req, res) => {
