@@ -44,7 +44,7 @@ const login = async (req, res) => {
                 msg: "Welcome",
                 profilePict: pict_url,
                 token,
-                id: payload.id
+                id
             });
         });
     } catch (error) {
