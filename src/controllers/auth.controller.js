@@ -43,7 +43,8 @@ const login = async (req, res) => {
             res.status(200).json({
                 msg: "Welcome",
                 profilePict: pict_url,
-                token
+                token,
+                id: payload.id
             });
         });
     } catch (error) {
