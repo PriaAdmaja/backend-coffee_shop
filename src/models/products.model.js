@@ -110,10 +110,10 @@ const getMetaProducts = (data) => {
             let next = `${endpoint}limit=${dataLimit}&page=${page + 1}`;
             if (page === 1) {
                 prev = null
-            };
+            }
             if (page === totalPage) {
                 next = null
-            };
+            }
             const meta = {
                 totalProduct,
                 totalPage,

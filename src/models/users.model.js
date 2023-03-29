@@ -1,5 +1,5 @@
 const db = require('../configs/db');
-const bcrypt = require('bcrypt')
+
 
 const getUsers = (query) => {
     return new Promise((resolve, reject) => {
