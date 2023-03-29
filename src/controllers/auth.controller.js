@@ -162,12 +162,10 @@ const forgotPassword = async (req, res) => {
             })
         }
         res.status(200).json({
-            data: {
-                email: body.email,
-                otp: result.rows[0].otp
-            },
-            msg: "Get otp code"
+            msg: "Send otp code"
         })
+        console.log(`email: ${body.email}`);
+        console.log(`otp: ${result.rows[0].otp}`);
 
     } catch (error) {
         console.log(error);
