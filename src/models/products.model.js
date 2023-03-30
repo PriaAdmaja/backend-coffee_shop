@@ -11,7 +11,7 @@ const getProduct = (data) => {
                     from products p join category c on p.category_id = c.id `;
 
         if (data.category !== undefined) {
-            sql += `where lower(category) like lower('%${data.category}%') `;
+            sql += `where lower(category) like lower('${data.category}') `;
         }
         if (data.name !== undefined) {
             sql += `where lower(name) like lower('%${data.name}%') `;
