@@ -69,25 +69,25 @@ const getSingleProduct = (params) => {
 
 const getMetaProducts = (data) => {
     return new Promise((resolve, reject) => {
-    
-        const sql = `select count(*) as total_products from products p `;
+        let sql = `select count(*) as total_products from products p join category c on p.category_id = c.id `;
+        let endpoint = `/products?`;
+            if (data.category !== undefined) {
+                endpoint += `category=${data.category}&`;
+                sql += `where lower(category) like lower('${data.category}')`;
+            }
+            if (data.name !== undefined) {
+                endpoint += `name=${data.name}&`;
+                sql += `where lower(name) like lower('%${data.name}%')`;
+            }
         db.query(sql, (err, result) => {
             if (err) {
                 return reject(err)
             }
-            console.log(result.rows[0].total_products);
+            console.log(result.rows[0]);
             const totalProduct = Number(result.rows[0].total_products);
             const page = Number(data.page || 1);
             const dataLimit = Number(data.limit || 10);
             const totalPage = Math.ceil(totalProduct / dataLimit);
-
-            let endpoint = `/products?`;
-            if (data.category !== undefined) {
-                endpoint += `category=${data.category}&`;
-            }
-            if (data.name !== undefined) {
-                endpoint += `name=${data.name}&`;
-            }
 
             switch (data.sortBy) {
                 case "nameDesc":
