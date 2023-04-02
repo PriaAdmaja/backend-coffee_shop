@@ -28,7 +28,7 @@ const getUsers = (query) => {
 
 const findUsers = (params) => {
     return new Promise((resolve, reject) => {
-        const sql = `select * from users where id=$1`;
+        const sql = `select phone_number, pict_url, first_name, last_name, gender, address, birth_date from users where id=$1`;
         const values = [params.id];
         db.query(sql, values, (err, result) => {
             if (err) {
@@ -80,7 +80,7 @@ const updateUsers = (data, authInfo) => {
         const dataQuery = dataAvail.map((data, i) => (`${data}$${i + 1}`)).join(`, `)
         const rawValues = [data.displayName, data.firstName, data.lastName, data.birthDate, data.gender, data.address, authInfo.id];
         const values = rawValues.filter(d => d);
-        let sql = `update users set ${dataQuery} where id=$${values.length} RETURNING *`;
+        let sql = `update users set ${dataQuery} where id=$${values.length} RETURNING display_name, first_name, last_name, birth_date, gender, address`;
         db.query(sql, values, (err, result) => {
             if (err) {
                 console.log(err);
