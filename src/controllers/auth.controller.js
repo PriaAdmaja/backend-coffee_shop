@@ -5,6 +5,7 @@ const db = require('../configs/db');
 
 const authModel = require('../models/auth.model');
 const usersModel = require('../models/users.model');
+const { error } = require('../utils/response');
 
 
 const login = async (req, res) => {
@@ -100,13 +101,13 @@ const logout = async (req, res) => {
         return res.status(200).json({
             msg: 'Token invalidated'
         })
-        
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
             msg: "Internal server error"
         })
-    } 
+    }
 
 }
 
@@ -202,6 +203,57 @@ const verifyOtp = async (req, res) => {
     }
 }
 
+const verifyToken = async (req, res) => {
+    try {
+        const bearerToken = req.header("Authorization")
+        if (!bearerToken) {
+            return error(res, {
+                status: '401',
+                message: 'Please login with your account'
+            })
+        };
+        const token = bearerToken.split(" ")[1];
+
+        const redisClient = redis.createClient({
+            url: `redis://${process.env.REDIS_USER}:${process.env.REDIS_PASSWORD}@redis-19327.c295.ap-southeast-1-1.ec2.cloud.redislabs.com:19327`
+        });
+        redisClient.on('error', err => console.log('Redis client error', err));
+        redisClient.on('connect', () => console.log('Redis connected!'));
+        await redisClient.connect();
+        const blTokenList = await redisClient.get(`bl_${token}`);
+        if (blTokenList) {
+            return res.status(401).json({
+                msg: "Invalid token"
+            })
+        }
+        await redisClient.disconnect();
+
+        jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
+            if (err && err.name) {
+                return error(res, {
+                    status: 403,
+                    message: err.message
+                })
+            }
+            if (err) {
+                return error(res, {
+                    status: 500,
+                    message: 'Internal server error'
+                })
+            }
+            res.status(200).json({
+                msg: "OK"
+            })
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: "Internal server error"
+        })
+    }
+};
+
+
 module.exports = {
     login,
     privateAccess,
@@ -209,5 +261,6 @@ module.exports = {
     forgotPassword,
     verifyOtp,
     register,
-    logout
+    logout,
+    verifyToken
 }
