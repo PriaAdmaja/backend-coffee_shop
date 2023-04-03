@@ -55,6 +55,13 @@ const getTransactionDetail = (client, transactionId) => {
     });
 };
 
+const getTransaction = () => {
+    return new Promise((resolve, reject) => {
+        const sql = 'select * from "transaction" t where t.users_id = $1';
+        
+    })
+}
+
 module.exports = {
     createTransaction,
     createCart,

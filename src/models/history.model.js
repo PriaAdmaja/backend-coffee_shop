@@ -2,7 +2,7 @@ const db = require('../configs/db');
 
 const getHistory = (params, query) => {
     return new Promise((resolve, reject) => {
-        let sql = `select * from history where user_id=$1 ` ;
+        let sql = `select * from transaction where user_id=$1 ` ;
         const values = [params.userId];
         if(query.limit !== undefined) {
             sql += `limit ${query.limit}`;
