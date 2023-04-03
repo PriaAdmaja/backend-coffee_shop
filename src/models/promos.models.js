@@ -2,7 +2,7 @@ const db = require('../configs/db');
 
 const getPromos = (data) => {
     return new Promise((resolve, reject) => {
-        let sql = `select * from promos`;
+        let sql = `select pr.id, pr.coupon_code, pr.discount, pr.description, p.name, p.pict_url from promos pr left join products p on p.id = pr.products_id`;
         if(data.limit !== undefined) {
             sql += `limit ${data.limit}`;
         }
