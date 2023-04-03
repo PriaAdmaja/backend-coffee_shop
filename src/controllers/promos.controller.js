@@ -5,7 +5,7 @@ const getPromos = async (req, res) => {
         const { query } = req;
         const result = await promosModel.getPromos(query);
         if (result.rows.length === 0) {
-            res.status(404).json({
+            return res.status(404).json({
                 data: result.rows,
                 msg: "Promo not found"
             });
