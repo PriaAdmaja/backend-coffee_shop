@@ -9,8 +9,8 @@ const memoryUpload = require('../middlewares/memoryUpload')
 
 productsRoute.get('/', productsController.getProduct);
 productsRoute.get('/:id', productsController.getSingleProduct);
-productsRoute.post('/', authMiddleware.checkTokenAdmin, memoryUpload.single("image"), cloudMiddleware.cloudUpload, productsController.addProduct);
-productsRoute.patch('/:id', authMiddleware.checkTokenAdmin, memoryUpload.single("image"), cloudMiddleware.cloudUpload, productsController.editProduct);
+productsRoute.post('/', authMiddleware.checkTokenAdmin, memoryUpload.single("image"), cloudMiddleware.cloudUploadProducts, productsController.addProduct);
+productsRoute.patch('/:id', authMiddleware.checkTokenAdmin, memoryUpload.single("image"), cloudMiddleware.cloudUploadProducts, productsController.editProduct);
 productsRoute.delete('/:id', authMiddleware.checkTokenAdmin, productsController.deleteProduct);
 
 module.exports = productsRoute;
