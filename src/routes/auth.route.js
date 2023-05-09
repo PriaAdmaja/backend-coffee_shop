@@ -6,7 +6,7 @@ const authMiddleware = require('../middlewares/auth')
 
 authRouter.get("/private", authMiddleware.checkToken, authController.privateAccess);
 authRouter.get("/verify", authController.verifyToken)
-authRouter.patch("/forgotpassword", authController.forgotPassword);
+authRouter.patch("/forgotpassword/:email", authController.forgotPassword);
 authRouter.post("/login", authController.login);
 authRouter.post("/register", authController.register);
 authRouter.post("/logout", authMiddleware.checkToken, authController.logout)
