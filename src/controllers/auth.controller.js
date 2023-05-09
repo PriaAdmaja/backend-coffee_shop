@@ -149,14 +149,14 @@ const editPassword = async (req, res) => {
 }
 
 const forgotPassword = async (req, res) => {
-    const { body } = req;
+    const { params } = req;
     const char = `qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM0987654321`
     let otp = ``
     for (let i = 0; i < 10; i++) {
         otp += char[Math.floor(Math.random() * char.length)]
     }
     try {
-        const result = await authModel.createOtp(body.email, otp);
+        const result = await authModel.createOtp(params.email, otp);
         if (result.rows.length === 0) {
             return res.status(404).json({
                 msg: "Email not found"
@@ -165,7 +165,7 @@ const forgotPassword = async (req, res) => {
         res.status(200).json({
             msg: "Send otp code"
         })
-        console.log(`email: ${body.email}`);
+        console.log(`email: ${params.email}`);
         console.log(`otp: ${result.rows[0].otp}`);
 
     } catch (error) {
