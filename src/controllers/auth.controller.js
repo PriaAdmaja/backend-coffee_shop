@@ -163,7 +163,7 @@ const forgotPassword = async (req, res) => {
             })
         }
         res.status(200).json({
-            msg: "Send otp code"
+            msg: "Check your mail"
         })
         console.log(`email: ${params.email}`);
         console.log(`otp: ${result.rows[0].otp}`);
