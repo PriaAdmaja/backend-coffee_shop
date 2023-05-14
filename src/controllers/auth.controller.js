@@ -89,7 +89,7 @@ const register = async (req, res) => {
 const logout = async (req, res) => {
     try {
         const redisClient = redis.createClient({
-            url: `redis://${process.env.REDIS_USER}:${process.env.REDIS_PASSWORD}@redis-19327.c295.ap-southeast-1-1.ec2.cloud.redislabs.com:19327`
+            url: `redis://${process.env.REDIS_USER}:${process.env.REDIS_PASSWORD}@redis-13178.c292.ap-southeast-1-1.ec2.cloud.redislabs.com:13178`
         });
         redisClient.on('error', err => console.log('Redis client error', err));
         await redisClient.connect();
