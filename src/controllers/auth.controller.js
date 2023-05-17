@@ -89,8 +89,6 @@ const register = async (req, res) => {
 
 const logout = async (req, res) => {
     try {
-       
-        
         redisClient.on('error', err => console.log('Redis client error', err));
         await redisClient.connect();
         const { authInfo, token } = req;
@@ -101,7 +99,6 @@ const logout = async (req, res) => {
         return res.status(200).json({
             msg: 'Token invalidated'
         })
-
     } catch (error) {
         console.log(error);
         res.status(500).json({
