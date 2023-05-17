@@ -67,8 +67,8 @@ const createUsers = async (req, res) => {
 
 const updateUsers = async (req, res) => {
     try {
-        const { body, authInfo } = req;
-        const result = await usersModel.updateUsers(body, authInfo);
+        const { body, params } = req;
+        const result = await usersModel.updateUsers(body, params);
         res.status(201).json({
             data: result.rows,
             msg: "Account updated"

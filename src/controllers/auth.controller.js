@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const redis = require('redis')
+const redis = require('redis');
 const db = require('../configs/db');
+const redisClient = require('../configs/redis')
 
 const authModel = require('../models/auth.model');
 const usersModel = require('../models/users.model');
@@ -88,16 +89,8 @@ const register = async (req, res) => {
 
 const logout = async (req, res) => {
     try {
-        const redisClient = redis.createClient({
-
-            // password: `${process.env.REDIS_PASSWORD}`,
-            // socket: {
-            //     host: 'redis-13178.c292.ap-southeast-1-1.ec2.cloud.redislabs.com',
-            //     port: 13178
-            // },
-            
-            url: `redis://${process.env.REDIS_USER}:${process.env.REDIS_PASSWORD}@redis-13178.c292.ap-southeast-1-1.ec2.cloud.redislabs.com:13178`
-        });
+       
+        
         redisClient.on('error', err => console.log('Redis client error', err));
         await redisClient.connect();
         const { authInfo, token } = req;
@@ -220,9 +213,6 @@ const verifyToken = async (req, res) => {
             })
         };
         const token = bearerToken.split(" ")[1];
-        const redisClient = redis.createClient({
-            url: `redis://${process.env.REDIS_USER}:${process.env.REDIS_PASSWORD}@redis-13178.c292.ap-southeast-1-1.ec2.cloud.redislabs.com:13178`
-        });
         redisClient.on('error', err => console.log('Redis client error', err));
         redisClient.on('connect', () => console.log('Redis connected!'));
         await redisClient.connect();

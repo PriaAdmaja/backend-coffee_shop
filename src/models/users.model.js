@@ -56,7 +56,7 @@ const createUsers = (email, password, phoneNumber) => {
     });
 };
 
-const updateUsers = (data, authInfo) => {
+const updateUsers = (data, params) => {
     return new Promise((resolve, reject) => {
         const dataAvail = []
         if (data.displayName != null) {
@@ -81,7 +81,7 @@ const updateUsers = (data, authInfo) => {
             dataAvail.push('pict_url=')
         }
         const dataQuery = dataAvail.map((data, i) => (`${data}$${i + 1}`)).join(`, `)
-        const rawValues = [data.displayName, data.firstName, data.lastName, data.birthDate, data.gender, data.address, data.pictUrl, authInfo.id];
+        const rawValues = [data.displayName, data.firstName, data.lastName, data.birthDate, data.gender, data.address, data.pictUrl, params.id];
         const values = rawValues.filter(d => d);
         let sql = `update users set ${dataQuery} where id=$${values.length} RETURNING display_name, first_name, last_name, birth_date, gender, address, pict_url`;
         db.query(sql, values, (err, result) => {
