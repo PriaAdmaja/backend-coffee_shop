@@ -22,60 +22,14 @@ const getHistory = async (req, res) => {
     }
 };
 
-const getAllHistory = async (req, res) => {
-    try {
-        const { query } = req;
-        const result = await historyModel.getAllHistory(query);
-        res.status(200).json({
-            data: result.rows,
-            msg: "Get history data"
-        });
-    } catch (err) {
-        res.status(500).json({
-            msg: "Internal server error"
-        });
-    }
-};
-
-const addHistory = async (req, res) => {
-    try {
-        const { body } = req;
-        const result = await historyModel.addHistory(body);
-        res.status(201).json({
-            data: result.rows,
-            msg: "Success add new history"
-        });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({
-            msg: "Internal server error"
-        });
-    }
-};
-
-const editHistory = async (req, res) => {
-    try {
-        const { body } = req;
-        const result = await historyModel.editHistory(body);
-        res.status(201).json({
-            data: result.rows,
-            msg: "Success update history"
-        });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({
-            msg: "Internal server error"
-        });
-    }
-};
-
 const deleteHistory = async (req, res) => {
     try {
-        const { body } = req;
-        const result = await historyModel.deleteHistory(body);
+        const { params } = req;
+        await historyModel.deleteCart(params);
+        const result = await historyModel.deleteTransaction(params);
         res.status(201).json({
             data: result.rows,
-            msg: "History deleted"
+            msg: "Transactions deleted"
         });
     } catch (err) {
         console.log(err);
@@ -87,8 +41,6 @@ const deleteHistory = async (req, res) => {
 
 module.exports = {
     getHistory,
-    addHistory,
-    editHistory,
     deleteHistory,
-    getAllHistory
+   
 };
