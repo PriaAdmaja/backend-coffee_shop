@@ -14,7 +14,7 @@ const createTransaction = async (req, res) => {
         const transactionDetail = await transactionModel.getTransactionDetail(client, transactionId);
         res.status(200).json({
             data: transactionDetail.rows,
-            msg: "OK"
+            msg: "Success create new order"
         })
     } catch (error) {
         console.log(error);
