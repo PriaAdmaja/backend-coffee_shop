@@ -46,6 +46,7 @@ const login = async (req, res) => {
                 msg: "Welcome",
                 profilePict: pict_url,
                 token,
+                roles_id,
                 id
             });
         });
