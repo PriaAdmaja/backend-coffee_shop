@@ -1,3 +1,4 @@
+const db = require('../configs/db');
 
 const createTransaction = (client, body, userId) => {
     return new Promise((resolve, reject) => {
@@ -34,6 +35,18 @@ const createCart = (client, body, transactionId) => {
     });
 };
 
+const editTransactionStatus = (statusId, transactionId) => {
+    return new Promise((resolve, reject) => {
+        const sql = `update "transaction" set status_id = $1 where id=$2 returning *`
+        db.query(sql, [statusId, transactionId], (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(result);
+        })
+    })
+}
+
 const getTransactionDetail = (client, transactionId) => {
     return new Promise((resolve, reject) => {
         const sql = `select u.email, b.address, p3."name" as "product", s2."size", p2."method" as "payment", c.quantity, p.coupon_code as "promo", c.price from cart c 
@@ -55,8 +68,15 @@ const getTransactionDetail = (client, transactionId) => {
     });
 };
 
+// const getAllTransactions = () => {
+//     return new Promise ((resolve, reject) => {
+
+//     })
+// }
+
 module.exports = {
     createTransaction,
     createCart,
-    getTransactionDetail
+    getTransactionDetail,
+    editTransactionStatus
 }

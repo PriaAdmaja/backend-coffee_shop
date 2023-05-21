@@ -8,11 +8,15 @@ const getHistory = (params, query) => {
         join deliveries d on d.id = t.deliveries_id 
         join payment p2 on p2.id = t.payment_id 
         join sizes s on s.id = c.size_id 
-        join status s2 on s2.id = t.status_id where t.users_id = $1 order by c.transaction_id desc` ;
-        const values = [params.userId];
+        join status s2 on s2.id = t.status_id where t.users_id = $1 ` ;
+        if(query.statusId !== undefined) {
+            sql += `and t.status_id = ${query.statusId} `
+        }
+        sql += `order by c.transaction_id desc `
         if(query.limit !== undefined) {
             sql += `limit ${query.limit}`;
         }
+        const values = [params.userId];
         db.query(sql, values, (err, result) => {
             if (err) {
                 reject(err);

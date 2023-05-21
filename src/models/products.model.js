@@ -8,13 +8,18 @@ const getProduct = (data) => {
                     p.price,
                     p.pict_url, 
                     c.category 
-                    from products p join category c on p.category_id = c.id `;
+                    from products p 
+                    join category c on p.category_id =  c.id `;
 
-        if (data.category !== undefined) {
+        if (data.category !== undefined && data.name !== undefined) {
+            sql += `where lower(category) like lower('${data.category}') 
+            and lower(name) like lower('%${data.name}%') `
+        } else if (data.category !== undefined) {
             sql += `where lower(category) like lower('${data.category}') `;
-        }
-        if (data.name !== undefined) {
+        } else if (data.name !== undefined) {
             sql += `where lower(name) like lower('%${data.name}%') `;
+        } else {
+            sql += ''
         }
 
         switch (data.sortBy) {
@@ -41,7 +46,7 @@ const getProduct = (data) => {
         const offset = (page - 1) * limit
 
         sql += `limit $1 offset $2`
-
+        console.log(sql);
         db.query(sql, [limit, offset], (err, result) => {
             if (err) {
                 reject(err);
@@ -71,14 +76,14 @@ const getMetaProducts = (data) => {
     return new Promise((resolve, reject) => {
         let sql = `select count(*) as total_products from products p join category c on p.category_id = c.id `;
         let endpoint = `/products?`;
-            if (data.category !== undefined) {
-                endpoint += `category=${data.category}&`;
-                sql += `where lower(category) like lower('${data.category}')`;
-            }
-            if (data.name !== undefined) {
-                endpoint += `name=${data.name}&`;
-                sql += `where lower(name) like lower('%${data.name}%')`;
-            }
+        if (data.category !== undefined) {
+            endpoint += `category=${data.category}&`;
+            sql += `where lower(category) like lower('${data.category}')`;
+        }
+        if (data.name !== undefined) {
+            endpoint += `name=${data.name}&`;
+            sql += `where lower(name) like lower('%${data.name}%')`;
+        }
         db.query(sql, (err, result) => {
             if (err) {
                 return reject(err)

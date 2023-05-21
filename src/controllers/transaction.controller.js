@@ -3,7 +3,7 @@ const db = require('../configs/db');
 const transactionModel = require('../models/transaction.model');
 
 const createTransaction = async (req, res) => {
-    const { authInfo, body} = req;
+    const { authInfo, body } = req;
     const client = await db.connect()
     try {
         await client.query("BEGIN");
@@ -26,6 +26,24 @@ const createTransaction = async (req, res) => {
     }
 };
 
+const editTransactionStatus = async (req, res) => {
+    try {
+        const { body, params } = req;
+        const result = await transactionModel.editTransactionStatus(body.statusId, params.transactionId);
+        res.status(201).json({
+            data: result.rows,
+            msg: "Success update transaction"
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: "Internal server error"
+        });
+    }
+}
+
 module.exports = {
-    createTransaction
+    createTransaction,
+    editTransactionStatus
 }
