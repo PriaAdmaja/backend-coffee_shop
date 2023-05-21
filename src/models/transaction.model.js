@@ -68,15 +68,33 @@ const getTransactionDetail = (client, transactionId) => {
     });
 };
 
-// const getAllTransactions = () => {
-//     return new Promise ((resolve, reject) => {
-
-//     })
-// }
+const getAllTransactions = (statusId) => {
+    return new Promise ((resolve, reject) => {
+        const values = []
+        let sql = `select distinct on (c.transaction_id) t.id, t.promos_id, t.updated_at, t.created_at, p2."method" as "payment", p."name", p.pict_url, s2.status , t.created_at, t.notes, d."method", t.grand_total, s."size", c.quantity  from "transaction" t 
+        join cart c on t.id = c.transaction_id 
+        join products p on p.id = c.product_id 
+        join deliveries d on d.id = t.deliveries_id 
+        join payment p2 on p2.id = t.payment_id 
+        join sizes s on s.id = c.size_id 
+        join status s2 on s2.id = t.status_id `
+        if(statusId !== undefined) {
+            sql += `where t.status_id = $1 `
+            values.push(statusId)
+        }
+        db.query(sql, values, (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(result);
+        })
+    })
+}
 
 module.exports = {
     createTransaction,
     createCart,
     getTransactionDetail,
-    editTransactionStatus
+    editTransactionStatus,
+    getAllTransactions
 }

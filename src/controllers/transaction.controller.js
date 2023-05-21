@@ -43,7 +43,25 @@ const editTransactionStatus = async (req, res) => {
     }
 }
 
+const getAllTransactions = async (req, res) => {
+    try {
+        const { query } = req;
+        const result = await transactionModel.getAllTransactions(query.statusId);
+        res.status(201).json({
+            data: result.rows,
+            msg: "Get transaction data"
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: "Internal server error"
+        });
+    }
+}
+
 module.exports = {
     createTransaction,
-    editTransactionStatus
+    editTransactionStatus,
+    getAllTransactions
 }

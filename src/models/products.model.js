@@ -9,15 +9,15 @@ const getProduct = (data) => {
                     p.pict_url, 
                     c.category 
                     from products p 
-                    join category c on p.category_id =  c.id `;
+                    join category c on p.category_id = c.id `;
 
         if (data.category !== undefined && data.name !== undefined) {
-            sql += `where lower(category) like lower('${data.category}') 
-            and lower(name) like lower('%${data.name}%') `
+            sql += `where lower(c.category) like lower('${data.category}') 
+            and lower(p.name) like lower('%${data.name}%') `
         } else if (data.category !== undefined) {
-            sql += `where lower(category) like lower('${data.category}') `;
+            sql += `where lower(c.category) like lower('${data.category}') `;
         } else if (data.name !== undefined) {
-            sql += `where lower(name) like lower('%${data.name}%') `;
+            sql += `where lower(p.name) like lower('%${data.name}%') `;
         } else {
             sql += ''
         }
