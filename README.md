@@ -41,11 +41,9 @@ Here are some related projects
 ```bash
   npm install
 ```
-4. create .env file
-```bash
-setup your env variables
-```
-5. Start the local server
+4. Setup your env variables with Environment Variable List below
+
+6. Start the local server
 ```bash
   npm run dev
 ```
