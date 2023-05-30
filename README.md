@@ -13,8 +13,8 @@ Rest API for Coffee Shop website.
 
 Here are some related projects
 
-[Front End Coffee-Shops](https://github.com/PriaAdmaja/client-coffee-shop-react)
-[Mobile Coffee-Shops](https://github.com/PriaAdmaja/mobile-coffee-shop)
+- [Front End Coffee-Shops](https://github.com/PriaAdmaja/client-coffee-shop-react)
+- [Mobile Coffee-Shops](https://github.com/PriaAdmaja/mobile-coffee-shop)
 
 ## Installation
 
