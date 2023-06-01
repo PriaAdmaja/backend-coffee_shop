@@ -13,18 +13,8 @@ Rest API for Coffee Shop website.
 
 Here are some related projects
 
-[Front End Coffee-Shops](https://github.com/PriaAdmaja/client-coffee-shop-react)
-
-
-## Tech Stack
-
-- [Node Js](https://nodejs.org/) 
-- [Express Js](https://expressjs.com/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [JSON Web Token](https://jwt.io/)
-- [MongoDB](https://www.mongodb.com/)
-- [Redis](https://www.mongodb.com/)
-
+- [Front End Coffee-Shops](https://github.com/PriaAdmaja/client-coffee-shop-react)
+- [Mobile Coffee-Shops](https://github.com/PriaAdmaja/mobile-coffee-shop)
 
 ## Installation
 
@@ -41,11 +31,9 @@ Here are some related projects
 ```bash
   npm install
 ```
-4. create .env file
-```bash
-setup your env variables
-```
-5. Start the local server
+4. Setup your env variables with Environment Variable List below
+
+6. Start the local server
 ```bash
   npm run dev
 ```
@@ -86,6 +74,14 @@ To run this project, you will need to add the following environment variables to
 
 You can try this Rest API with postman in [here](https://elements.getpostman.com/redirect?entityId=23660749-247a04f3-95e7-48ec-b5e0-bdcba2f17e0f&entityType=collection)
 
+## Tech Stack
+
+- [Node Js](https://nodejs.org/) 
+- [Express Js](https://expressjs.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [JSON Web Token](https://jwt.io/)
+- [MongoDB](https://www.mongodb.com/)
+- [Redis](https://www.mongodb.com/)
 
 ## Feedback
 
