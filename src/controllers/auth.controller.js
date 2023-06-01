@@ -151,7 +151,7 @@ const forgotPassword = async (req, res) => {
     const { params } = req;
     const char = `0987654321`
     let otp = ``
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {
         otp += char[Math.floor(Math.random() * char.length)]
     }
     try {
