@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const redis = require('redis');
 const db = require('../configs/db');
 const redisClient = require('../configs/redis')
+const nodemailer = require("nodemailer")
 
 const authModel = require('../models/auth.model');
 const usersModel = require('../models/users.model');
@@ -148,7 +149,7 @@ const editPassword = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
     const { params } = req;
-    const char = `qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM0987654321`
+    const char = `0987654321`
     let otp = ``
     for (let i = 0; i < 10; i++) {
         otp += char[Math.floor(Math.random() * char.length)]
