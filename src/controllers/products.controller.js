@@ -5,8 +5,9 @@ const getProduct = async (req, res) => {
         const { query } = req;
         const result = await productsModel.getProduct(query);
         if(result.rows.length === 0) {
-            return res.status(404).json({
-                msg: "Product not found"
+            return res.status(200).json({
+                msg: "Product not found",
+                data: []
             })
         };
         const meta = await productsModel.getMetaProducts(query);
