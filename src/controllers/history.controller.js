@@ -5,7 +5,7 @@ const getHistory = async (req, res) => {
         const { query, params } = req;
         const result = await historyModel.getHistory(params, query);
         if (result.rows.length === 0) {
-            return res.status(404).json({
+            return res.status(200).json({
                 data: result.rows,
                 msg: "Data not found"
             });
