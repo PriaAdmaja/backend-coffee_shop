@@ -2,12 +2,8 @@ const { uploader } = require('../utils/cloudinary');
 
 const cloudUploadProducts = async (req, res, next) => {
     try {
-        if (req.fileValidationError) {
-            return res.status(422).json({
-                msg: req.fileValidationError
-            })
-        }
-        const result = await uploader(req.file, "Products", req.params.id);
+        const id = req.body.id || req.params.id
+        const result = await uploader(req.file, "Products", id);
         const { data, err, msg } = result
         if (err) throw { msg: err };
         if (!data) {

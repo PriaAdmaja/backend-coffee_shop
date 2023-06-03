@@ -1,4 +1,6 @@
 const productsModel = require('../models/products.model');
+const db = require('../configs/db')
+const uploader = require('../utils/cloudinary')
 
 const getProduct = async (req, res) => {
     try {
@@ -40,19 +42,38 @@ const getSingleProduct = async (req, res) => {
     }
 };
 
-const addProduct = async (req, res) => {
+const addProduct = async (req, res, ) => {
+    let client
     try {
-        const { body } = req;
+        client = await db.connect()
+        await client.query('BEGIN')
+        const { body, file } = req;
         const result = await productsModel.addProduct(body);
+        const uploadResult = await uploader.uploader(file, "Products", result.rows[0].id)
+        const data = {
+            pictUrl : uploadResult.data.secure_url
+        }
+        const params = {
+            id: result.rows[0].id
+        }
+        const updateResult = await productsModel.editProduct(data, params)
         res.status(201).json({
-            data: result.rows,
+            data: updateResult.rows,
             msg: "Success add new product"
         });
+        await client.query('COMMIT')
     } catch (err) {
+        if(client) {
+            client.query('ROLLBACK')
+        }
         console.log(err);
         res.status(500).json({
             msg: "Internal server error"
         });
+    } finally {
+        if(client) {
+            client.release()
+        }
     }
 };
 

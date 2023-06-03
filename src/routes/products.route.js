@@ -10,7 +10,7 @@ const fileSizeLimitErrorHandler = require('../middlewares/fileSizeErrorHandler')
 
 productsRoute.get('/', productsController.getProduct);
 productsRoute.get('/:id', productsController.getSingleProduct);
-productsRoute.post('/', authMiddleware.checkTokenAdmin, memoryUpload.single("image"), fileSizeLimitErrorHandler.fileSizeLimitErrorHandler, cloudMiddleware.cloudUploadProducts, productsController.addProduct);
+productsRoute.post('/', authMiddleware.checkTokenAdmin, memoryUpload.single("image"), fileSizeLimitErrorHandler.fileSizeLimitErrorHandler, productsController.addProduct);
 productsRoute.patch('/:id', authMiddleware.checkTokenAdmin, memoryUpload.single("image"), fileSizeLimitErrorHandler.fileSizeLimitErrorHandler, cloudMiddleware.cloudUploadProducts, productsController.editProduct);
 productsRoute.delete('/:id', authMiddleware.checkTokenAdmin, productsController.deleteProduct);
 

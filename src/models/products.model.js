@@ -133,7 +133,7 @@ const getMetaProducts = (data) => {
 const addProduct = (data) => {
     return new Promise((resolve, reject) => {
         const sql = "INSERT INTO products (name, price, description, category_id) values ($1, $2, $3, $4) RETURNING *";
-        const values = [data.productName, data.price, data.description, data.categoryId, data.pictUrl];
+        const values = [data.productName, data.price, data.description, data.categoryId];
         db.query(sql, values, (err, result) => {
             if (err) {
                 return reject(err);

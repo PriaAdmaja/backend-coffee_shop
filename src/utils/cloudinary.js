@@ -16,7 +16,7 @@ const uploader = async (file, prefix, id) => {
             public_id: fileName,
             folder: "coffee_shop"
         });
-        return { data: result, msg: "OK"};
+        return { data: result, msg: "Succes upload photo"};
     } catch (error) {
         return { data: null, msg: "Upload failed"}
     }
