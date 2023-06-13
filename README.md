@@ -3,18 +3,15 @@
 
 Rest API for Coffee Shop website.
 
+## Tech Stack
 
-## Demo
+- [Node Js](https://nodejs.org/) 
+- [Express Js](https://expressjs.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [JSON Web Token](https://jwt.io/)
+- [MongoDB](https://www.mongodb.com/)
+- [Redis](https://www.mongodb.com/)
 
- [Link](https://backend-coffee-shop.vercel.app/)
-
-
-## Related Projects
-
-Here are some related projects
-
-- [Front End Coffee-Shops](https://github.com/PriaAdmaja/client-coffee-shop-react)
-- [Mobile Coffee-Shops](https://github.com/PriaAdmaja/mobile-coffee-shop)
 
 ## Installation
 
@@ -69,26 +66,26 @@ To run this project, you will need to add the following environment variables to
 
 `REDIS_PASSWORD` = Your Redis Password
 
+## Demo
+
+ [Link](https://backend-coffee-shop.vercel.app/)
 
 ## Postman Collection
 
 You can try this Rest API with postman in [here](https://elements.getpostman.com/redirect?entityId=23660749-247a04f3-95e7-48ec-b5e0-bdcba2f17e0f&entityType=collection)
-
-## Tech Stack
-
-- [Node Js](https://nodejs.org/) 
-- [Express Js](https://expressjs.com/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [JSON Web Token](https://jwt.io/)
-- [MongoDB](https://www.mongodb.com/)
-- [Redis](https://www.mongodb.com/)
-
-## Feedback
-
-If you have any feedback, please reach out to me at priaadmaja@gmail.com
 
 
 ## Authors
 
 - [PriaAdmaja](https://github.com/PriaAdmaja)
 
+## Related Projects
+
+Here are some related projects
+
+- [Front End Coffee-Shops](https://github.com/PriaAdmaja/client-coffee-shop-react)
+- [Mobile Coffee-Shops](https://github.com/PriaAdmaja/mobile-coffee-shop)
+
+## Feedback
+
+If you have any feedback, please reach out to me at priaadmaja@gmail.com
