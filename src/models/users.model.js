@@ -59,31 +59,35 @@ const createUsers = (email, password, phoneNumber) => {
 const updateUsers = (data, params) => {
     return new Promise((resolve, reject) => {
         const dataAvail = []
-        if (data.displayName != null) {
+        if (data.displayName) {
             dataAvail.push('display_name=')
         }
-        if (data.firstName != null) {
+        if (data.firstName) {
             dataAvail.push('first_name=')
         }
-        if (data.lastName != null) {
+        if (data.lastName) {
             dataAvail.push('last_name=')
         }
-        if (data.birthDate != null) {
+        if (data.birthDate) {
             dataAvail.push('birth_date=')
         }
-        if (data.gender != null) {
+        if (data.gender) {
             dataAvail.push('gender=')
         }
-        if (data.address != null) {
+        if (data.address) {
             dataAvail.push('address=')
         }
-        if (data.pictUrl != null) {
+        if (data.pictUrl) {
             dataAvail.push('pict_url=')
         }
+        if(data.fcmToken) {
+            dataAvail.push('fcm_token=')
+        }
         const dataQuery = dataAvail.map((data, i) => (`${data}$${i + 1}`)).join(`, `)
-        const rawValues = [data.displayName, data.firstName, data.lastName, data.birthDate, data.gender, data.address, data.pictUrl, params.id];
+        const rawValues = [data.displayName, data.firstName, data.lastName, data.birthDate, data.gender, data.address, data.pictUrl, data.fcmToken, params.id];
         const values = rawValues.filter(d => d);
         let sql = `update users set ${dataQuery} where id=$${values.length} RETURNING display_name, first_name, last_name, birth_date, gender, address, pict_url`;
+        console.log(sql);
         db.query(sql, values, (err, result) => {
             if (err) {
                 console.log(err);
