@@ -28,7 +28,7 @@ const getUsers = (query) => {
 
 const findUsers = (params) => {
     return new Promise((resolve, reject) => {
-        const sql = `select email, display_name, phone_number, pict_url, first_name, last_name, gender, address, birth_date from users where id=$1`;
+        const sql = `select email, display_name, phone_number, pict_url, first_name, last_name, gender, address, birth_date, fcm_token from users where id=$1`;
         const values = [params.id];
         db.query(sql, values, (err, result) => {
             if (err) {

@@ -1,6 +1,8 @@
 const db = require('../configs/db');
 
 const transactionModel = require('../models/transaction.model');
+const usersModel = require('../models/users.model')
+const { send } = require('../utils/notification')
 
 const createTransaction = async (req, res) => {
     const { authInfo, body } = req;
@@ -30,6 +32,19 @@ const editTransactionStatus = async (req, res) => {
     try {
         const { body, params } = req;
         const result = await transactionModel.editTransactionStatus(body.statusId, params.transactionId);
+        
+        const data = {
+            id : result.rows[0].users_id
+        }
+        const userData = await usersModel.findUsers(data)
+        if(userData.rows[0].fcm_token) {
+            const notification = {
+                title: 'Order',
+                body: 'Your order has been processed by admin.'
+            }
+            await send(userData.rows[0].fcm_token, notification)
+        }
+        
         res.status(201).json({
             data: result.rows,
             msg: "Success update transaction"
