@@ -86,7 +86,7 @@ You can try this Rest API with postman in [here](https://elements.getpostman.com
 Here are some related projects
 
 - [Front End Coffee-Shops(Website) ](https://github.com/PriaAdmaja/client-coffee-shop-react)
-- [Mobile Coffee-Shops](https://github.com/PriaAdmaja/mobile-coffee-shop)
+- [Mobile Coffee-Shops](https://github.com/PriaAdmaja/mobile-coffee)
 
 ## Feedback
 
